@@ -1,26 +1,35 @@
+// Classe responsável por fazer requisições à API - aluno
 class AlunoRequests {
-    private serverUrl: string;
-    private endpointAlunos: string;
+    private serverURL;
+    private endpointAluno;
 
     constructor() {
-        this.serverUrl = 'http://localhost:3333';
-        this.endpointAlunos = '/api/alunos';
+        this.serverURL = `http://localhost:3333`;
+        this.endpointAluno = `/api/alunos`;
     }
 
-    async listarAlunos() {
+    async obterListaDeAlunos() {
         try {
-            const response = await fetch(`${this.serverUrl}${this.endpointAlunos}`);
+            const token = localStorage.getItem('token');
 
-            if (!response.ok) {
-                throw new Error('Não foi possível listar os alunos.');
+            const respostaAPI = await fetch(`${this.serverURL}${this.endpointAluno}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': `${token}`
+                }
+            });
+
+            if(respostaAPI.ok) {
+                const listaDeAlunos = await respostaAPI.json();
+                return listaDeAlunos;
+            } else {
+                throw new Error("Não foi possível listar os alunos.");
             }
-
-            return response.json();
         } catch (error) {
-            console.error(`Erro ao fazer consulta à API: ${error}`);
-            return null;
+            console.error(`Erro ao fazer a consulta de alunos. ${error}`);
+            return;
         }
     }
 }
 
-export default new AlunoRequests();
+export default new AlunoRequests;

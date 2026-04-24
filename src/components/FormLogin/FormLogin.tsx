@@ -2,7 +2,7 @@ import { type JSX, useState } from 'react';
 import estilo from './FormLogin.module.css';
 import AuthRequests from '../../fetch/AuthRequests';
 
-function LoginForm(): JSX.Element {
+function FormLogin(): JSX.Element {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
@@ -15,28 +15,36 @@ function LoginForm(): JSX.Element {
         preventDefault: () => void;
     }
 
-    const handleSubmit = async (e: FormEvent): Promise<void> => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
         const login: LoginData = { email: email, senha: senha };
 
         try {
-            if (await AuthRequests.login(login)) {
+            const sucesso = await AuthRequests.login(login);
+
+            if (sucesso) {
                 window.location.href = '/';
+            } else {
+                alert('E-mail ou senha incorretos');
             }
+
         } catch (error) {
             console.error(`Erro ao tentar fazer login: ${error}`);
-            alert('Erro ao fazer login, verifique seu email e/ou senha.');
+            alert('Erro ao conectar com o servidor.');
         }
     };
 
     return (
         <section className={estilo['login-form-container']}>
-            <form action="POST" className={estilo['login-form']} onSubmit={handleSubmit}>
-                <h2>LOGIN</h2>
+
+            <form className={estilo['login-form']} onSubmit={handleSubmit}>
+
+                <h2 className={estilo['login-header']}>LOGIN</h2>
 
                 <div className={estilo['form-group']}>
                     <label>
-                        Email
+                        E-mail
                         <input
                             type="email"
                             placeholder='Informe o seu email'
@@ -72,4 +80,4 @@ function LoginForm(): JSX.Element {
     );
 }
 
-export default LoginForm;
+export default FormLogin;
