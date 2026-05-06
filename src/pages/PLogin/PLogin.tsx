@@ -1,7 +1,7 @@
 import { type JSX } from "react";
 
-import Navegacao from "../Navegacao/Navegacao";
-import LoginForm from "../FormLogin/FormLogin";
+import Navegacao from "../../components/Navegacao/Navegacao";
+import LoginForm from "../../components/FormLogin/FormLogin";
 
 
 // Componente funcional que representa a página de login
